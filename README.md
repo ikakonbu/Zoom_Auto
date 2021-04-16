@@ -1,6 +1,7 @@
 # Zoom_auto : 群馬大学Zoom自動実行クライアント
 授業時間になったらZoomに勝手に入ってくれるダメ人間製造機
 ___
+[画像に意味はありません](https://github.com/ishida-shunya/Zoom_Auto/blob/images/otintin.gif)
 
 ## 現時点で入ってる機能
 * 時間になったらZoomへ自動参加(5分前)
