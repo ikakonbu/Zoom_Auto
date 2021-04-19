@@ -11,7 +11,8 @@ ___
 
 
 # 導入方法
-GitHubにプロジェクトを移行した関係上、OneDriveと勝手が違うので注意。<br>
+GitHubにプロジェクトを移行した関係上、OneDriveと勝手が違うので注意。
+![落とし方](https://github.com/ishida-shunya/Zoom_Auto/blob/images/image1.png)
 はじめに、右上にある緑色の「code」ボタンをクリックし、下の方にある「Download Zip」を選択。
 あとは好きなところに落としてあげて、Zipを展開すればダウンロード作業はおしまい。
 
@@ -82,7 +83,11 @@ GitHubにプロジェクトを移行した関係上、OneDriveと勝手が違う
   ︙
 ```
 
+![こんな感じで出るよ](https://github.com/ishida-shunya/Zoom_Auto/blob/images/image2.png)
+
 一番下の`[何曜日の説明]`になにか書いておくと、Zoom参加時にメッセージが表示されます。出席確認がMoodleで行われるとか、カメラOnの準備をする！　みたいなちょっとした情報を書いておくのに使ってください
+
+
 
 ### フォントの導入(任意)
 本アプリでは標準フォントとしてM+ 2pを選択しています。このフォントを入れてもらうとよりきれいなレイアウトになります。
@@ -90,13 +95,15 @@ https://mplus-fonts.osdn.jp/about.html
 
 # 使い方 & 操作説明
 基本的には起動して放置しとけばいいけど、一応解説。
-![画像が入る予定](https://github.com/ishida-shunya/Zoom_Auto/blob/images/otintin.gif)
+
+![起動画面](https://github.com/ishida-shunya/Zoom_Auto/blob/images/image3.png)<br>
 起動するとこんな感じの画面が開きます。
 右上の「休日モードにする」をONにすることで、OFFにするまでZoomに入らなくなります。　休校日とか祝日のときに使ってください
 また、下の画像でおおよその状態がわかります。(しばらくなにもない, 講義直前, 講義中, 登校日など)
 
 上の「設定」タブを押すことで、設定画面が開きます。
-![画像が入る予定](https://github.com/ishida-shunya/Zoom_Auto/blob/images/otintin.gif)
+
+![設定画面](https://github.com/ishida-shunya/Zoom_Auto/blob/images/image4.png)<br>
 * **休日モードが一日で切れるようにする**
 　<br>休日モードがある時間に自動で切れるようになります。気づかないまま寝落ちして次の日に寝坊するのを防止する用の機能。
 * **休日モードを外す時間**
