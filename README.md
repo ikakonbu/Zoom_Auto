@@ -11,22 +11,22 @@ ___
 
 
 # 導入方法
-GitHubにプロジェクトを移行した関係上、OneDriveと勝手が違うので注意。
 ![落とし方](https://github.com/ishida-shunya/Zoom_Auto/blob/images/image1.png)
 はじめに、右上にある緑色の「code」ボタンをクリックし、下の方にある「Download Zip」を選択。
 あとは好きなところに落としてあげて、Zipを展開すればダウンロード作業はおしまい。
 
-### 環境設定
-本プログラムはPythonコード上で動作させている関係上、利用する場合はPython環境の導入が必須です。
 #### Windows環境の方
-[こちら](https://qiita.com/New_enpitsu_15/items/ee95bde0858e9f77acf0)を参考にどうぞ
+落としたファイルの「Win_exe」フォルダーとその中身以外は消してもらって構いません。
+「Win_exe」内の"群大Zoom自動実行.exe"をクリックすると起動します。
 
 #### Macの方
 製作者はMac環境で試せないので動く確証はありません。過去に動作確認を行いましたが、その後に色々手を加えてるので、動かなかったら諦めてください。
+また、exeのようにパッケージ化してないので、Python導入→Python上でソースを動かす形になります。
 参考にするのであれば[こういうの](https://daeudaeu.com/python-gui-install/#Python_Launcher_Python)かと。
 
 ### 授業ZoomID,パスワード及び説明の入力
 起動する前に、授業情報の登録が必要です。授業情報は付属の`class.conf`に記入します。<br>
+Win_exe側を使う方は「Win_exe」内部の`class.conf`を書き換えてください。<br>
 メモ帳かなにかで開いてあげてると、こんな感じに書かれてます。
 
 ```
