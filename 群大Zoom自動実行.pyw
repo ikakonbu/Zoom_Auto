@@ -129,22 +129,26 @@ label2.place(x=20,y=90) #いつ消すかをマニュアルで設定できるよ�
 #マニュアルでZoomを開くところの表示設定
 label3 = tk.Label(tab2, text = "マニュアル実行", bg="#FDF9F1" ,font=("M+ 2p",12,"bold"))
 label3.place(x=20,y=250)
-label4 = tk.Label(tab2, height=2, text = "         曜日の　　　　　時限 ", bg="#f7bc7c" ,font=("M+ 2p",12))
+label4 = tk.Label(tab2, height=2, text = "        　 曜日の　　　　時限 ", bg="#f7bc7c" ,font=("M+ 2p",12))
 label4.place(x=30,y=295)
 if platform.system() != 'Windows':
-	label4.place(x=50,y=300)
+    label4.place(x=50,y=300)
 
-manual_day = tk.Entry(tab2, width=2, font=("M+ 2p",20))
-manual_day.place(x=40, y=300)
-manual_day.insert(tk.END,"月")
+Comfont = ("M+ 2p" , '16')
 
-manual_time = tk.Entry(tab2, width=2, font=("M+ 2p",20))
-manual_time.place(x=165, y=300)
+manual_day_text=tk.StringVar()
+manual_day = ttk.Combobox(tab2, font=Comfont, values=("月","火","水","木","金"), textvariable=manual_day_text, state="readonly", width=2 )
+manual_day.current(0)
+manual_day.place(x=35, y=304)
+
+manual_time_text=tk.StringVar()
+manual_time = ttk.Combobox(tab2, font=Comfont, values=("1","2","3","4","5"), textvariable=manual_time_text, state="readonly", width=2 )
+manual_time.current(0)
+manual_time.place(x=150, y=304)
 if platform.system() != 'Windows':
-	manual_time.place(x=135, y=300)
-manual_time.insert(tk.END,"1")
+    manual_time.place(x=135, y=304)
 
-manual_btn = tk.Button(tab2, fg='#310D04', bg='#FDF3E3', text='    実行    ', font=("M+ 2p",14), command = lambda: manual_do(manual_day.get(),manual_time.get()))
+manual_btn = tk.Button(tab2, fg='#310D04', bg='#FDF3E3', text='    実行    ', font=("M+ 2p",14), command = lambda: manual_do(manual_day_text.get(),manual_time_text.get()))
 manual_btn.place(x=270, y=297)
 
 
@@ -194,29 +198,19 @@ root.protocol("WM_DELETE_WINDOW", on_closing)
 
 #マニュアルでZoomを開く関数
 def manual_do(doday, dotime):
-    flag=0
+    if classdata[doday+"曜日のID"][dotime] != "aki":
+        murl = 'zoommtg:\"//zoom.us/join?confno=' + classdata[doday+"曜日のID"][dotime] + '&pwd=' + classdata[doday+"曜日のpass"][dotime] + "\""
+        if platform.system()=='Windows':
+            subprocess.Popen('start ' + murl , shell=True) #WIndowsコマンドとしてコマンドプロンプトに渡して実行させる
+        else:
+            subprocess.Popen('open ' + murl , shell=True) #Mac環境下の場合はこっち
 
-    if int(dotime) >= 1 and int(dotime) <= 5:
-        for i in range(5):
-            if doday == daylist[i][0]:
-                flag=1
-
-                if classdata[str(daylist[i][0]) + "曜日のID"][dotime]!="aki":
-                    murl = 'zoommtg:\"//zoom.us/join?confno=' + classdata[daylist[i][0]+"曜日のID"][dotime] + '&pwd=' + classdata[daylist[i][0]+"曜日のpass"][dotime] + "\""
-                    if platform.system()=='Windows':
-                        subprocess.Popen('start ' + murl , shell=True) #WIndowsコマンドとしてコマンドプロンプトに渡して実行させる
-                    else:
-                        subprocess.Popen('open ' + murl , shell=True) #Mac環境下の場合はこっち
-
-                    if classdata[str(daylist[i][0]) + "曜日の説明"][dotime] != "なし":
-                        Thread(target=printmessage , args=('説明',classdata[str(daylist[i][0]) + "曜日の説明"][dotime])).start()
-                else:
-                    Thread(target=printmessage , args=("あきこま", "その時間は空きコマだよ")).start()
-
-        if flag!=1:
-            Thread(target=printmessage , args=("エラー", "曜日の欄は漢字１文字で入れてくれ…")).start()
+        if classdata[doday + "曜日の説明"][dotime] != "なし":
+            Thread(target=printmessage , args=('説明',classdata[doday + "曜日の説明"][dotime])).start()
     else:
-        Thread(target=printmessage , args=("エラー", "1~5時限で入れてくれ")).start()
+        Thread(target=printmessage , args=("あきこま", "その時間は空きコマだよ")).start()
+
+
 
 
 
