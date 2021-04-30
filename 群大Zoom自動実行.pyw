@@ -129,26 +129,26 @@ label2.place(x=20,y=90) #いつ消すかをマニュアルで設定できるよ�
 #マニュアルでZoomを開くところの表示設定
 label3 = tk.Label(tab2, text = "マニュアル実行", bg="#FDF9F1" ,font=("M+ 2p",12,"bold"))
 label3.place(x=20,y=250)
-label4 = tk.Label(tab2, height=2, text = "        　 曜日の　　　　時限 ", bg="#f7bc7c" ,font=("M+ 2p",12))
-label4.place(x=30,y=295)
+label4 = tk.Label(tab2, height=2, text = "        　曜日の 　　　　　時限 ", bg="#f7bc7c" ,font=("M+ 2p",12))
+label4.place(x=20,y=295)
 if platform.system() != 'Windows':
-    label4.place(x=50,y=300)
+    label4.place(x=40,y=300)
 
 Comfont = ("M+ 2p" , '16')
 
 manual_day_text=tk.StringVar()
 manual_day = ttk.Combobox(tab2, font=Comfont, values=("月","火","水","木","金"), textvariable=manual_day_text, state="readonly", width=2 )
 manual_day.current(0)
-manual_day.place(x=35, y=304)
+manual_day.place(x=25, y=304)
 
 manual_time_text=tk.StringVar()
-manual_time = ttk.Combobox(tab2, font=Comfont, values=("1","2","3","4","5"), textvariable=manual_time_text, state="readonly", width=2 )
+manual_time = ttk.Combobox(tab2, font=Comfont, values=("1-2","3-4","5-6","7-8","9-10"), textvariable=manual_time_text, state="readonly", width=4 )
 manual_time.current(0)
-manual_time.place(x=150, y=304)
+manual_time.place(x=130, y=304)
 if platform.system() != 'Windows':
-    manual_time.place(x=135, y=304)
+    manual_time.place(x=115, y=304)
 
-manual_btn = tk.Button(tab2, fg='#310D04', bg='#FDF3E3', text='    実行    ', font=("M+ 2p",14), command = lambda: manual_do(manual_day_text.get(),manual_time_text.get()))
+manual_btn = tk.Button(tab2, fg='#310D04', bg='#FDF3E3', text='    実行    ', font=("M+ 2p",14), command = lambda: manual_do(manual_day_text.get(),str(int((int(manual_time_text.get()[0])+1)/2)) ))
 manual_btn.place(x=270, y=297)
 
 
