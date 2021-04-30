@@ -249,31 +249,31 @@ def loop():
 
 
     if kyuzitu == 0: #休日モードはoff?
-        if Hybrid_flag == 0:
-	        if nowday<5: #平日？休日？
-	            for i in range(5):
-	                if nowtime == str(classtime[i]):           #該当する次官になった？
-	                    if classdata[str(daylist[nowday][0]) + "曜日のID"][str(i+1)] != 'aki':          #空きコマは無視する
-	                        url = 'zoommtg:\"//zoom.us/join?confno=' + classdata[daylist[nowday][0]+"曜日のID"][str(i+1)] + '&pwd=' +  classdata[daylist[nowday][0]+"曜日のpass"][str(i+1)] + "\""    #URLスキームの形に変形
-	                        if platform.system()=='Windows':
-	                            subprocess.Popen('start ' + url , shell=True) #WIndowsコマンドとしてコマンドプロンプトに渡して実行させる
-	                        else:
-	                            subprocess.Popen('open ' + url , shell=True) #Mac環境下の場合はこっち
+        if nowday<5: #平日？休日？
+            if Hybrid_flag == 0:
+                for i in range(5):
+                    if nowtime == str(classtime[i]):           #該当する次官になった？
+                        if classdata[str(daylist[nowday][0]) + "曜日のID"][str(i+1)] != 'aki':          #空きコマは無視する
+                            url = 'zoommtg:\"//zoom.us/join?confno=' + classdata[daylist[nowday][0]+"曜日のID"][str(i+1)] + '&pwd=' +  classdata[daylist[nowday][0]+"曜日のpass"][str(i+1)] + "\""    #URLスキームの形に変形
+                            if platform.system()=='Windows':
+                                subprocess.Popen('start ' + url , shell=True) #WIndowsコマンドとしてコマンドプロンプトに渡して実行させる
+                            else:
+                                subprocess.Popen('open ' + url , shell=True) #Mac環境下の場合はこっち
 
-	                        if classdata[str(daylist[nowday][0]) + "曜日の説明"][str(i+1)] != "なし":
-	                            Thread(target=printmessage , args=('説明',classdata[str(daylist[nowday][0]) + "曜日の説明"][str(i+1)])).start()
+                            if classdata[str(daylist[nowday][0]) + "曜日の説明"][str(i+1)] != "なし":
+                                Thread(target=printmessage , args=('説明',classdata[str(daylist[nowday][0]) + "曜日の説明"][str(i+1)])).start()
 
-	                        imageprint(3)
-	                        imagetimer[0]=1
-	                        imagetimer[1]=6
-	                    else:
-	                        imageprint(4)
-	                        imagetimer[0]=4
-	                        imagetimer[1]=6
-	        else:
-	            imageprint(5) #休日の日は休日だと表示
+                            imageprint(3)
+                            imagetimer[0]=1
+                            imagetimer[1]=6
+                        else:
+                            imageprint(4)
+                            imagetimer[0]=4
+                            imagetimer[1]=6
+            else:
+                imageprint(7) #登校日の表示
         else:
-            imageprint(7) #投稿日のときは投稿日だと表示！
+            imageprint(5) #休日の表示
 
     label['text'] = "現在時刻   " + str(datetime.datetime.today().hour) + ":" + str(datetime.datetime.today().minute).zfill(2)
     label.place(x=-0, y=0) #時刻表示を更新
