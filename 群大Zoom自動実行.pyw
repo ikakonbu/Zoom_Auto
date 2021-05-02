@@ -22,6 +22,7 @@ classdata.read('class.conf','UTF-8')
 #ここから下は概ねウインドウの設定
 # メインウィンドウを定義
 root = tk.Tk()
+root.iconbitmap('images/icon.ico')
 root.title('群大Zoom自動実行クライアント')
 root.geometry("410x480")
 if platform.system() != 'Windows':
@@ -176,9 +177,16 @@ rb3 = ttk.Radiobutton(tab2, text='設定なし',value='3',variable=radio_num)
 rb3.place(x=240, y=190)
 
 
+config_btn = tk.Button(tab2, fg='#595959', bg='#FDF5F1', text=' 設定ファイルを開く ', font=("M+ 2p",10), command = lambda: config_open())
+config_btn.place(x=250,y=390)
+
 #メッセージボックス出力関数
 def printmessage(x,y):
     ret = messagebox.showinfo(x,y)
+
+def config_open():
+	subprocess.Popen('start ' + '.\class.conf', shell=True)
+	Thread(target=printmessage , args=("注意", "変更した設定は再起動後に有効になります")).start()
 
 #終了時に警告&設定書き込みする部分
 def on_closing():
@@ -217,7 +225,7 @@ def manual_do(doday, dotime):
 # メインルーチン
 def loop():
 
-    jobid = tab1.after(60000, loop) #1分ごとに定期的にこいつを動かして表示を更新
+    jobid = root.after(60000, loop) #1分ごとに定期的にこいつを動かして表示を更新
     t = datetime.datetime.today()
     nowtime = str(t.hour) + ":" + str(format(t.minute,'02')) #現在時刻を取る
     nowday = t.weekday()#曜日も取得
