@@ -61,13 +61,19 @@ imagetimer = [1,-1] #指定した時間たったら画像に変更するフラ�
 oldimage = 6 #1個前の画像を保存しておく
 nowimage = 6 #現在の状態
 jobid=None #並列実行時に使う
+zoom_started=[0,0,0,0,0] #すでにzoomが立ち上がっているかの判定
 daylist = [ #プログラム⇔設定ファイルのデータの変換用
 ["月", 0],
 ["火", 1],
 ["水", 2],
 ["木", 3],
 ["金", 4]]
-classtime = ['8:35','10:15','12:35','14:15','15:55']#各時限の5分前の時刻を記入しておく
+nowtime = datetime.datetime.now()
+classtime = [datetime.datetime(nowtime.year,nowtime.month,nowtime.day,8,40,0),
+             datetime.datetime(nowtime.year,nowtime.month,nowtime.day,10,20,0),
+             datetime.datetime(nowtime.year,nowtime.month,nowtime.day,12,40,0),
+             datetime.datetime(nowtime.year,nowtime.month,nowtime.day,14,20,0),
+             datetime.datetime(nowtime.year,nowtime.month,nowtime.day,16,0,0)]#各時限の開始時刻を記入しておく
 
 def imageprint(u): #画像を変更するときの関数
     if u==1: canvas.create_image(0, 0, image=inclass, anchor=tk.NW)
@@ -101,8 +107,14 @@ def btn_click(x): #休日モードのボタンを押されたときの関数
         oldimage = nowimage
         imageprint(5)
         btn.pack(x=290, y=5)
-
-
+ 
+def update_classtime(): #授業時間の日時がずれると正しく計算できなくなるので,日付変わったら更新する関数
+    nowtime = datetime.datetime.now()
+    classtime = [datetime.datetime(nowtime.year,nowtime.month,nowtime.day,8,40,0,0),
+                datetime.datetime(nowtime.year,nowtime.month,nowtime.day,10,20,0,0),
+                datetime.datetime(nowtime.year,nowtime.month,nowtime.day,12,40,0,0),
+                datetime.datetime(nowtime.year,nowtime.month,nowtime.day,14,20,0,0),
+                datetime.datetime(nowtime.year,nowtime.month,nowtime.day,16,0,0,0)]
 
 
 #休日モードのボタンの配置
@@ -226,11 +238,11 @@ def manual_do(doday, dotime):
 def loop():
 
     jobid = root.after(60000, loop) #1分ごとに定期的にこいつを動かして表示を更新
-    t = datetime.datetime.today()
-    nowtime = str(t.hour) + ":" + str(format(t.minute,'02')) #現在時刻を取る
-    nowday = t.weekday()#曜日も取得
+    nowtime = datetime.datetime.now()
+    nowday = nowtime.weekday()#曜日も取得
     weeknum = datetime.date.today().isocalendar()[1] #週番号をとる
     Hybrid_setting = int(radio_num.get()) #ハイブリッドの設定してるか取る
+    if(nowtime.hour==0 and nowtime.minute==0): update_classtime() #日付変わったら授業時間のdatetimeを更新
 
     #学籍番号の設定があるときはここで投稿日か判定
     if weeknum%2 == 0:
@@ -251,7 +263,7 @@ def loop():
     if Hybrid_setting == 3:  #ハイブリッドの設定してなかったら全蒸し
         Hybrid_flag = 0
 
-    if kmode.get()==True and kyuzitu==1 and nowtime == settime.get() :
+    if kmode.get()==True and kyuzitu==1 and str(nowtime.hour) + ":" + nowtime.minutes.zfill(2) == settime.get() :
         Thread(target=printmessage , args=("注意","休日モードを解除しました")).start()
         btn_click(0)
 
@@ -260,7 +272,9 @@ def loop():
         if nowday<5: #平日？休日？
             if Hybrid_flag == 0:
                 for i in range(5):
-                    if nowtime == str(classtime[i]):           #該当する次官になった？
+                    sabun = nowtime - classtime[i]
+                    if sabun.seconds >= -300 and sabun.seconds <= 4800 and zoom_started[i]==0:           #該当する次官になった？
+                        zoom_started[i]=1
                         if classdata[str(daylist[nowday][0]) + "曜日のID"][str(i+1)] != 'aki':          #空きコマは無視する
                             url = 'zoommtg:\"//zoom.us/join?confno=' + classdata[daylist[nowday][0]+"曜日のID"][str(i+1)] + '&pwd=' +  classdata[daylist[nowday][0]+"曜日のpass"][str(i+1)] + "\""    #URLスキームの形に変形
                             if platform.system()=='Windows':
@@ -278,12 +292,14 @@ def loop():
                             imageprint(4)
                             imagetimer[0]=4
                             imagetimer[1]=6
+                    else:
+                        zoom_started[i]=0
             else:
                 imageprint(7) #登校日の表示
         else:
             imageprint(5) #休日の表示
 
-    label['text'] = "現在時刻   " + str(datetime.datetime.today().hour) + ":" + str(datetime.datetime.today().minute).zfill(2)
+    label['text'] = "現在時刻   " + str(nowtime.hour) + ":" + str(nowtime.minute).zfill(2)
     label.place(x=-0, y=0) #時刻表示を更新
 
     if imagetimer[1] > 0: imagetimer[1] = imagetimer[1]-1
