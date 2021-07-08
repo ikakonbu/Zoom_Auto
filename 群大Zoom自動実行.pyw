@@ -267,7 +267,8 @@ def loop():
     if kyuzitu == 0: #休日モードはoff?
         if nowday<5: #平日？休日？
             if Hybrid_flag == 0:
-
+                #初期画像表示
+                imageprint(6)
                 for i in range(5):
                     #現在時刻との差分をとる
                     sabun_sign=1
