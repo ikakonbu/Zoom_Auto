@@ -278,10 +278,10 @@ def loop():
 
 
                     #授業5分前~授業中(差分-300~5400秒)になった？
-                    if sabun >= -300 and sabun < 5400 and zoom_started[i]==0:           
-                        zoom_started[i]=1
+                    if sabun >= -300 and sabun < 5400 and zoom_started[i]==0:
 
                         #空きコマでなければZoom実行
+                        zoom_started[i]=1
                         if classdata[str(daylist[nowday][0]) + "曜日のID"][str(i+1)] != 'aki':
                             url = 'zoommtg:\"//zoom.us/join?confno=' + classdata[daylist[nowday][0]+"曜日のID"][str(i+1)] + '&pwd=' +  classdata[daylist[nowday][0]+"曜日のpass"][str(i+1)] + "\""    #URLスキームの形に変形
                             if platform.system()=='Windows':
@@ -293,12 +293,9 @@ def loop():
                             if classdata[str(daylist[nowday][0]) + "曜日の説明"][str(i+1)] != "なし":
                                 Thread(target=printmessage , args=('説明',classdata[str(daylist[nowday][0]) + "曜日の説明"][str(i+1)])).start()
 
-                            imageprint(3) #5分後に1番の画像を表示
+                            if sabun<0: imageprint(3)
                         else:
-                            imageprint(4) #5分後に4版を表示
-                    else:
-                        zoom_started[i]=0
-
+                            imageprint(4)
 
                     #授業開始時(差分0~60秒)に授業中の画像を表示
                     if sabun >= 0 and sabun <= 60: 
@@ -307,6 +304,7 @@ def loop():
 
                     #いままでやってた授業が終わったら(差分90分~91分)お疲れ様の画像出してあげる
                     if sabun >= 5400 and sabun <= 5460: 
+                         zoom_started[i]=0
                          if classdata[str(daylist[nowday][0]) + "曜日のID"][str(i+1)] != 'aki': imageprint(2)
 
             else:
