@@ -30,6 +30,13 @@ if platform.system() != 'Windows':
 root.resizable(0,0)
 root.configure(bg="#FDF9F1")
 
+#フォント設定置き場
+Comfont = ("M+ 2p" , '16')
+stdfont = ("M+ 2p" , '12')
+boldfont = ("M+ 2p", '12', "bold")
+btnfont = ("M+ 2p" , '8')
+timefont = ("M+ 2p" , '20')
+
 #タブの設定
 nb = ttk.Notebook(width=400, height=470)
 tab1 = tk.Frame(nb, bg="#FDF9F1")
@@ -39,7 +46,7 @@ nb.add(tab2, text=' 設定 ', padding=5)
 nb.pack(expand=1, fill='both')
 
 #現在時刻を表示するラベル
-label = tk.Label(tab1, fg='#310D04', bg="#FDF9F1", text=str(datetime.datetime.today().second), anchor="w", font=("M+ 2p",20))
+label = tk.Label(tab1, fg='#310D04', bg="#FDF9F1", text=str(datetime.datetime.today().second), anchor="w", font=timefont)
 label.place(x=-100, y=0)
 
 #画像を読み込んでおく
@@ -57,9 +64,6 @@ canvas.place(x=0, y=42)
 canvas.create_image(0, 0, image=nothing, anchor=tk.NW)
 
 kyuzitu = 0 #マニュアルで休日を設定された時に使用
-imagetimer = [1,-1] #指定した時間たったら画像に変更するフラグ
-oldimage = 6 #1個前の画像を保存しておく
-nowimage = 6 #現在の状態
 jobid=None #並列実行時に使う
 zoom_started=[0,0,0,0,0] #すでにzoomが立ち上がっているかの判定
 daylist = [ #プログラム⇔設定ファイルのデータの変換用
@@ -77,10 +81,7 @@ classtime = [datetime.datetime(nowtime.year,nowtime.month,nowtime.day,8,40,0),
 
 def imageprint(u): #画像を変更するときの関数
     if u==1: canvas.create_image(0, 0, image=inclass, anchor=tk.NW)
-    if u==2:
-        canvas.create_image(0, 0, image=endclass, anchor=tk.NW)
-        imagetimer[0]=6
-        imagetimer[1]=6 #講義終了後5分で戻す
+    if u==2: canvas.create_image(0, 0, image=endclass, anchor=tk.NW)
     if u==3: canvas.create_image(0, 0, image=startclass, anchor=tk.NW)
     if u==4: canvas.create_image(0, 0, image=noclass, anchor=tk.NW)
     if u==5: canvas.create_image(0, 0, image=holiday, anchor=tk.NW)
@@ -88,13 +89,10 @@ def imageprint(u): #画像を変更するときの関数
     if u==7: canvas.create_image(0, 0, image=goschool, anchor=tk.NW)
 
 def btn_click(x): #休日モードのボタンを押されたときの関数
-    global kyuzitu,oldimage,nowimage
+    global kyuzitu
     if kyuzitu == 1:
         kyuzitu=0
         btn['text'] = "休日モードにする"
-        imageprint(oldimage)
-        print(oldimage)
-        nowimage = oldimage
         btn.pack(x=290, y=5)
         if jobId is not None and x==1:  # 休日モードを外した際に一回メインルーチンを回して確認
             tab1.after_cancel(jobId)
@@ -104,7 +102,6 @@ def btn_click(x): #休日モードのボタンを押されたときの関数
     if kyuzitu == 0:
         kyuzitu=1
         btn['text'] = "休日モードを外す"
-        oldimage = nowimage
         imageprint(5)
         btn.pack(x=290, y=5)
  
@@ -118,7 +115,7 @@ def update_classtime(): #授業時間の日時がずれると正しく計算で�
 
 
 #休日モードのボタンの配置
-btn = tk.Button(tab1, fg='#310D04', bg='#FDF3E3', text='休日モードにする', font=("M+ 2p",8), command = lambda: btn_click(1))
+btn = tk.Button(tab1, fg='#310D04', bg='#FDF3E3', text='休日モードにする', font=btnfont, command = lambda: btn_click(1))
 btn.place(x=290, y=5)
 
 kmode = tk.BooleanVar()
@@ -127,27 +124,25 @@ if ini['setting']['setting1'] == "True":
 else:
     kmode.set(False)
 
-kmode_box = tk.Checkbutton(tab2, variable=kmode, text='休日モードが1日で切れるようにする', bg='#FDF9F1', font=("M+ 2p",12))
+kmode_box = tk.Checkbutton(tab2, variable=kmode, text='休日モードが1日で切れるようにする', bg='#FDF9F1', font=stdfont)
 kmode_box.place(x=20, y=40)  #休日モードを消せる設定とチェック状態を格納する変数を宣言
 
-settime = tk.Entry(tab2, width=10, font=("M+ 2p",12))
+settime = tk.Entry(tab2, width=10, font=stdfont)
 settime.place(x=210, y=90)
 settime.insert(tk.END,str(ini['setting']['setting2']))
-label2 = tk.Label(tab2, text = "休日モードを外す時間", bg="#FDF9F1" ,font=("M+ 2p",12,"bold"))
+label2 = tk.Label(tab2, text = "休日モードを外す時間", bg="#FDF9F1" ,font=boldfont)
 label2.place(x=20,y=90) #いつ消すかをマニュアルで設定できるようにここに書いておく
 
 
 
 
 #マニュアルでZoomを開くところの表示設定
-label3 = tk.Label(tab2, text = "マニュアル実行", bg="#FDF9F1" ,font=("M+ 2p",12,"bold"))
+label3 = tk.Label(tab2, text = "マニュアル実行", bg="#FDF9F1" ,font=boldfont)
 label3.place(x=20,y=250)
-label4 = tk.Label(tab2, height=2, text = "        　曜日の 　　　　　時限 ", bg="#f7bc7c" ,font=("M+ 2p",12))
+label4 = tk.Label(tab2, height=2, text = "        　曜日の 　　　　　時限 ", bg="#f7bc7c" ,font=stdfont)
 label4.place(x=20,y=295)
 if platform.system() != 'Windows':
     label4.place(x=40,y=300)
-
-Comfont = ("M+ 2p" , '16')
 
 manual_day_text=tk.StringVar()
 manual_day = ttk.Combobox(tab2, font=Comfont, values=("月","火","水","木","金"), textvariable=manual_day_text, state="readonly", width=2 )
@@ -161,13 +156,14 @@ manual_time.place(x=130, y=304)
 if platform.system() != 'Windows':
     manual_time.place(x=115, y=304)
 
+tab1.option_add("*TCombobox*Listbox*Font", stdfont)
 manual_btn = tk.Button(tab2, fg='#310D04', bg='#FDF3E3', text='    実行    ', font=("M+ 2p",14), command = lambda: manual_do(manual_day_text.get(),str(int((int(manual_time_text.get()[0])+1)/2)) ))
 manual_btn.place(x=270, y=297)
 
 
 
 #学籍番号によって動作を変えるハイブリッド授業用設定
-label4 = tk.Label(tab2, text = "学籍番号設定(ハイブリッド用)", bg="#FDF9F1" ,font=("M+ 2p",12,"bold"))
+label4 = tk.Label(tab2, text = "学籍番号設定(ハイブリッド用)", bg="#FDF9F1" ,font=boldfont)
 label4.place(x=20,y=150)
 
 #ラジオボタンの状態を持っておく変数
@@ -177,7 +173,7 @@ radio_num.set(ini['setting']['setting3'])
 
 #ttkのパーツはstyleで設定しないとフォントとか変わらないからここでstyleを決める
 style = ttk.Style()
-style.configure("TRadiobutton",font=("M+ 2p",12))
+style.configure("TRadiobutton",font=stdfont)
 
 rb1 = ttk.Radiobutton(tab2, text='奇数',value='1',variable=radio_num)
 rb1.place(x=50, y=190)
@@ -271,29 +267,47 @@ def loop():
     if kyuzitu == 0: #休日モードはoff?
         if nowday<5: #平日？休日？
             if Hybrid_flag == 0:
+
                 for i in range(5):
-                    sabun = nowtime - classtime[i]
-                    if sabun.seconds >= -300 and sabun.seconds <= 4800 and zoom_started[i]==0:           #該当する次官になった？
+                    #現在時刻との差分をとる
+                    sabun_sign=1
+                    sabuntemp = nowtime - classtime[i]   #timedelta型で-の値は自動的に正に直されるので、自分で符号を判定
+                    if sabuntemp.days==-1: sabun_sign=-1 #授業時間と現在時刻との差分(正負ありの秒数)を生成
+                    sabun = abs(sabuntemp).seconds*sabun_sign
+
+
+                    #授業5分前~授業中(差分-300~5400秒)になった？
+                    if sabun >= -300 and sabun < 5400 and zoom_started[i]==0:           
                         zoom_started[i]=1
-                        if classdata[str(daylist[nowday][0]) + "曜日のID"][str(i+1)] != 'aki':          #空きコマは無視する
+
+                        #空きコマでなければZoom実行
+                        if classdata[str(daylist[nowday][0]) + "曜日のID"][str(i+1)] != 'aki':
                             url = 'zoommtg:\"//zoom.us/join?confno=' + classdata[daylist[nowday][0]+"曜日のID"][str(i+1)] + '&pwd=' +  classdata[daylist[nowday][0]+"曜日のpass"][str(i+1)] + "\""    #URLスキームの形に変形
                             if platform.system()=='Windows':
                                 subprocess.Popen('start ' + url , shell=True) #WIndowsコマンドとしてコマンドプロンプトに渡して実行させる
                             else:
                                 subprocess.Popen('open ' + url , shell=True) #Mac環境下の場合はこっち
 
+                            #クラスの説明があれば表示
                             if classdata[str(daylist[nowday][0]) + "曜日の説明"][str(i+1)] != "なし":
                                 Thread(target=printmessage , args=('説明',classdata[str(daylist[nowday][0]) + "曜日の説明"][str(i+1)])).start()
 
-                            imageprint(3)
-                            imagetimer[0]=1
-                            imagetimer[1]=6
+                            imageprint(3) #5分後に1番の画像を表示
                         else:
-                            imageprint(4)
-                            imagetimer[0]=4
-                            imagetimer[1]=6
+                            imageprint(4) #5分後に4版を表示
                     else:
                         zoom_started[i]=0
+
+
+                    #授業開始時(差分0~60秒)に授業中の画像を表示
+                    if sabun >= 0 and sabun <= 60: 
+                        if classdata[str(daylist[nowday][0]) + "曜日のID"][str(i+1)] != 'aki': imageprint(1)
+
+
+                    #いままでやってた授業が終わったら(差分90分~91分)お疲れ様の画像出してあげる
+                    if sabun >= 5400 and sabun <= 5460: 
+                         if classdata[str(daylist[nowday][0]) + "曜日のID"][str(i+1)] != 'aki': imageprint(2)
+
             else:
                 imageprint(7) #登校日の表示
         else:
@@ -301,19 +315,7 @@ def loop():
 
     label['text'] = "現在時刻   " + str(nowtime.hour) + ":" + str(nowtime.minute).zfill(2)
     label.place(x=-0, y=0) #時刻表示を更新
-
-    if imagetimer[1] > 0: imagetimer[1] = imagetimer[1]-1
-    if imagetimer[1] == 0:
-        imagetimer[1] = -1
-        imageprint(imagetimer[0]) #タイマーで予約された画像があれば指定した時間に表示
-        if imagetimer[0]==1: #講義が始まったら90分後に終了画像を出すように予約
-            imagetimer[0]=2
-            imagetimer[1]=90
-        if imagetimer[0]==4: #休講だったら90分後になにもない状態にする
-            imagetimer[0]=6
-            imagetimer[1]=90
-
-    if kyuzitu == 1: imageprint(5)
+    
 
 
 # 最初の起動
