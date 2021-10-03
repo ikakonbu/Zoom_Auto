@@ -31,11 +31,12 @@ root.resizable(0,0)
 root.configure(bg="#FDF9F1")
 
 #フォント設定置き場
-Comfont = ("M+ 2p" , '16')
-stdfont = ("M+ 2p" , '12')
-boldfont = ("M+ 2p", '12', "bold")
-btnfont = ("M+ 2p" , '8')
-timefont = ("M+ 2p" , '20')
+smallfont =  ("Noto Sans JP" , '10')
+Comfont = ("Noto Sans JP" , '16')
+stdfont = ("Noto Sans JP" , '12')
+boldfont = ("Noto Sans JP", '12', "bold")
+btnfont2 = ("Noto Sans JP", '14')
+timefont = ("Noto Sans JP" , '20')
 
 #タブの設定
 nb = ttk.Notebook(width=400, height=470)
@@ -115,8 +116,8 @@ def update_classtime(): #授業時間の日時がずれると正しく計算で�
 
 
 #休日モードのボタンの配置
-btn = tk.Button(tab1, fg='#310D04', bg='#FDF3E3', text='休日モードにする', font=btnfont, command = lambda: btn_click(1))
-btn.place(x=290, y=5)
+btn = tk.Button(tab1, fg='#310D04', bg='#FDF3E3', text='休日モードにする', font=smallfont, command = lambda: btn_click(1))
+btn.place(x=270, y=5)
 
 kmode = tk.BooleanVar()
 if ini['setting']['setting1'] == "True":
@@ -157,7 +158,7 @@ if platform.system() != 'Windows':
     manual_time.place(x=115, y=304)
 
 tab1.option_add("*TCombobox*Listbox*Font", stdfont)
-manual_btn = tk.Button(tab2, fg='#310D04', bg='#FDF3E3', text='    実行    ', font=("M+ 2p",14), command = lambda: manual_do(manual_day_text.get(),str(int((int(manual_time_text.get()[0])+1)/2)) ))
+manual_btn = tk.Button(tab2, fg='#310D04', bg='#FDF3E3', text='    実行    ', font=btnfont2, command = lambda: manual_do(manual_day_text.get(),str(int((int(manual_time_text.get()[0])+1)/2)) ))
 manual_btn.place(x=270, y=297)
 
 
@@ -185,7 +186,7 @@ rb3 = ttk.Radiobutton(tab2, text='設定なし',value='3',variable=radio_num)
 rb3.place(x=240, y=190)
 
 
-config_btn = tk.Button(tab2, fg='#595959', bg='#FDF5F1', text=' 設定ファイルを開く ', font=("M+ 2p",10), command = lambda: config_open())
+config_btn = tk.Button(tab2, fg='#595959', bg='#FDF5F1', text=' 設定ファイルを開く ', font=smallfont, command = lambda: config_open())
 config_btn.place(x=250,y=390)
 
 #メッセージボックス出力関数
