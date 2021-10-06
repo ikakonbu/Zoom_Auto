@@ -112,7 +112,9 @@ font = 神フォント
 
 PCにインストールされているフォントであればどのフォントでも適用できますが、フォントによって表示が崩れることがあるので、Noto Sans JP , M+ fontを利用することを推奨します
 
-[Noto Sans JP]https://fonts.google.com/noto/specimen/Noto+Sans+JP     [M+ font]https://github.com/coz-m/MPLUS_FONTS
+[Noto Sans JP]https://fonts.google.com/noto/specimen/Noto+Sans+JP
+
+[M+ font]https://github.com/coz-m/MPLUS_FONTS
 
 
 # 使い方 & 操作説明
