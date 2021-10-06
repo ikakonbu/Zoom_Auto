@@ -31,12 +31,12 @@ root.resizable(0,0)
 root.configure(bg="#FDF9F1")
 
 #フォント設定置き場
-smallfont =  ("Noto Sans JP" , '10')
-Comfont = ("Noto Sans JP" , '16')
-stdfont = ("Noto Sans JP" , '12')
-boldfont = ("Noto Sans JP", '12', "bold")
-btnfont2 = ("Noto Sans JP", '14')
-timefont = ("Noto Sans JP" , '20')
+smallfont =  (ini['setting']['font'] , '10')
+Comfont = (ini['setting']['font'] , '16')
+stdfont = (ini['setting']['font'] , '12')
+boldfont = (ini['setting']['font'], '12', "bold")
+btnfont2 = (ini['setting']['font'], '14')
+timefont = (ini['setting']['font'] , '20')
 
 #タブの設定
 nb = ttk.Notebook(width=400, height=470)
@@ -206,6 +206,7 @@ def on_closing():
         config.set(section1, 'setting1', str(kmode.get()))
         config.set(section1, 'setting2', settime.get())
         config.set(section1, 'setting3', radio_num.get())
+        config.set(section1, 'font', ini['setting']['font'])
         file =  open('setting.conf', 'w')
         config.write(file)
         root.destroy()

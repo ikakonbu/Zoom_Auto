@@ -98,9 +98,22 @@ ___
 
 
 
-### フォントの導入(推奨)
-本アプリでは標準フォントとしてM+ 2pを選択しています。このフォントを入れてもらうとよりきれいなレイアウトになります。
-https://mplus-fonts.osdn.jp/about.html
+### フォントの変更
+当ソフトでは表示フォントの変更が行なえます。 `setting.conf`を開き、一番下のfont設定を書き換えてください。
+### 書き方例
+
+```
+[setting]
+setting1 = True
+setting2 = 0:00
+setting3 = 1
+font = 神フォント
+```
+
+PCにインストールされているフォントであればどのフォントでも適用できますが、フォントによって表示が崩れることがあるので、Noto Sans JP , M+ fontを利用することを推奨します
+
+[Noto Sans JP]https://fonts.google.com/noto/specimen/Noto+Sans+JP     [M+ font]https://github.com/coz-m/MPLUS_FONTS
+
 
 # 使い方 & 操作説明
 基本的には起動して放置しとけばいいけど、一応解説。
